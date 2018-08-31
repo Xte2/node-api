@@ -36,18 +36,11 @@ app.get('/todos', (req, res) => {
 //GET /todos/1221313232
 app.get('/todos/:id', (req, res) => {
 
-  debugger;
-
   var id = req.params.id;
 
-  debugger;
-
   if (!ObjectID.isValid(id)){
-    debugger;
-    res.status(404);
+    return res.status(404);
   }
-
-  debugger;
 
   Todo.findById(id).then((todo) =>{
     if (!todo){
