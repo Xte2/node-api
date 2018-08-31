@@ -107,9 +107,60 @@ describe('GET /todos:id', () => {
 
     it('should return 404 for non-object ids', (done) => {
       // /todos/123
+
+      debugger;
       var id = "123";
       request(app)
         .get(`/todos/${id}`)
+        .expect(404)
+        .end(done);
+    });
+
+});
+
+
+describe('DELETE /todos:id', () => {
+    it('should delete a todo doc', (done) => {
+      request(app)
+        .delete(`/todos/${todos[1]._id.toHexString()}`)
+        .expect(200)
+        .expect((res) => {
+          //USING THE EXPECT liBRARY
+          expect(res.body.todo._id).toBe(todos[1]._id.toHexString());
+        })
+        .end((err,res) => {
+          if (err){
+            return done(err);
+          }
+
+          Todo.findById({_id: todos[1]._id.toHexString()}).then((todo) => {
+            expect(todo).toNotExist();
+            done();
+          })
+          .catch( (e) => {
+            done();
+          });
+
+          //query databse using findById toNotExist
+          //expect (null).toNotExist()
+        });
+    });
+
+    it('should return 404 if todo not found when deleting', (done) => {
+      //make sure tou get a 404 back
+      // id does not exist
+      var id = new ObjectID().toHexString();
+      request(app)
+        .delete(`/todos/${id}`)
+        .expect(404)
+        .end(done);
+    });
+    //
+    it('should return 404 for non-object ids when deleting', (done) => {
+      // /todos/123
+      var id = "123";
+      request(app)
+        .delete(`/todos/${id}`)
         .expect(404)
         .end(done);
     });

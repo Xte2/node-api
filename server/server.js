@@ -40,18 +40,23 @@ app.get('/todos/:id', (req, res) => {
 
   var id = req.params.id;
 
+  debugger;
+
   if (!ObjectID.isValid(id)){
-    return res.status(404);
+    debugger;
+    return  res.status(404).send();
   }
 
   Todo.findById(id).then((todo) =>{
     if (!todo){
+      debugger;
       return res.status(404).send();
     }
     res.status(200).send({todo});
   },
   (e) =>{
-    res.status(400).send();
+    debugger;
+    res.status(400).send(e);
   });
 
 
@@ -75,13 +80,13 @@ app.delete('/todos/:id', (req,res) =>{
   var id = req.params.id;
 
   if (!ObjectID.isValid(id)){
-    return res.status(404);
+    return res.status(404).send();
   }
 
   //validate the id -> not valid? return 404
 
   Todo.findByIdAndRemove(id).then((todo) => {
-    console.log(todo);
+    //console.log(todo);
 
     if (!todo){
       return res.status(404).send();
