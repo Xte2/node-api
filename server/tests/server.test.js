@@ -108,7 +108,6 @@ describe('GET /todos:id', () => {
     it('should return 404 for non-object ids', (done) => {
       // /todos/123
 
-      debugger;
       var id = "123";
       request(app)
         .get(`/todos/${id}`)
@@ -164,5 +163,50 @@ describe('DELETE /todos:id', () => {
         .expect(404)
         .end(done);
     });
+
+});
+
+
+describe('PATCH /todos:id', () => {
+    it('shoud update the todo doc', (done) => {
+
+      var text = "Update the todo doc";
+      var completed = true;
+
+      request(app)
+        .patch(`/todos/${todos[1]._id.toHexString()}`)
+        .send({text,completed})
+        .expect(200)
+        .expect((res) => {
+          //USING THE EXPECT liBRARY
+          debugger;
+          expect(res.body.todo.text).toBe(text);
+          expect(res.body.todo.completed).toBe(true);
+          expect(typeof res.body.todo.completedAt).toBe('number');
+        })
+        .end(done);
+    });
+    //
+     it('should clear completedAt when todo is not completed', (done) => {
+    //   // /Grab id of second todo item
+    //   //update text, set completed to false
+    //   //200
+    //   //text is changed, completed false, completedAt is null .toNotExist
+
+    var text = "Update the todo doc2";
+    var completed = false;
+
+    request(app)
+      .patch(`/todos/${todos[1]._id.toHexString()}`)
+      .send({text,completed})
+      .expect(200)
+      .expect((res) => {
+        //USING THE EXPECT liBRARY
+        expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.completedAt).toBe(null);
+      })
+      .end(done);
+     });
 
 });
