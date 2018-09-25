@@ -15,6 +15,12 @@ try {
   console.log(e);
 };
 
+var hasedValue = "$2a$10$zxmRZgEERy/JVOTMCU6aiuYMBL0chc25uloHrnlmT4jLqh5Xbdo1W";
+
+bcrypt.compare(password, hasedValue, function(err, res) {
+      console.log(res);
+});
+
 
 // var data = {
 //   id: 10
